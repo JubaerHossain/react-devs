@@ -1,17 +1,18 @@
 import React, { useEffect } from 'react';
 import  LoadingBox  from '../_components/LoadingBox'
 import MessageBox from '../_components/MessageBox';
-import { Link } from 'react-router-dom';
 import config from 'config';
 import { useDispatch, useSelector } from 'react-redux';
 import Table from 'react-bootstrap/Table'
 import { userActions,productActions } from '../_actions';
 import { history } from '../_helpers';
+import Pagination from 'react-bootstrap-4-pagination';
 const ProductList = (props) => {
     const dispatch = useDispatch();
     const { loading, error,  products } =useSelector(state => state.products);
     useEffect(() => {
         dispatch(productActions.getproductAll());
+        
     }, []);
   
     function handleDeleteUser(id) {
@@ -22,6 +23,29 @@ const ProductList = (props) => {
     function goToEdit(data,id) {
         history.push(data,id);
     }
+    let prod = products ? products.meta : ''
+  
+     console.log(prod.last_page - prod.current_page);
+      let paginationConfig = {
+        totalPages: prod.last_page,
+        currentPage: prod.current_page,
+        showMax: prod.per_page,
+        size: "sm",
+        threeDots: true,
+        prevNext:  true,
+        borderColor: 'red',
+        activeBorderColor: 'black',
+        activeBgColor: 'green',
+        disabledBgColor: 'red',
+        activeColor: 'red',
+        color: 'purple',
+        disabledColor: 'grey',
+        circle: true,
+        shadow: true,
+        onClick: function (page) {
+            dispatch(productActions.getproductAll(page));
+         }
+      };
     return (
         <>
         {loading ? (
@@ -65,6 +89,7 @@ const ProductList = (props) => {
                     )}
                 </tbody>
             </Table>
+            <Pagination {...paginationConfig} />
             </>
                 )
                }

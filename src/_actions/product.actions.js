@@ -13,11 +13,11 @@ export const productActions = {
     productdelete
 };
 
-function getproductAll() {
+function getproductAll(page=0) {
     return dispatch => {
         dispatch(request());
 
-        productService.getproductAll()
+        productService.getproductAll(page)
             .then(
                 products => dispatch(success(products)),
                 error => dispatch(failure(error.toString()))

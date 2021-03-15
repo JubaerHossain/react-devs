@@ -10,12 +10,12 @@ export const productService = {
 
 
 
-function getproductAll() {
+function getproductAll(page) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
-    return fetch(`${config.apiUrl}/products`, requestOptions).then(handleResponse);
+    return fetch(`${config.apiUrl}/products?page=${page}`, requestOptions).then(handleResponse);
 }
 
 function getProduct(id) {
