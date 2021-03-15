@@ -40,7 +40,6 @@ function ProductAdd() {
 
     return (
        <>
-        <HeaderPage></HeaderPage>
         <div className="col-lg-8 offset-lg-2  p-5">
             <div className="d-flex">
                 <h2>Add Product</h2>

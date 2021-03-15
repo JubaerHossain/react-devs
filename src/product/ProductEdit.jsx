@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { HeaderPage } from '../partials/header';
 import { Button } from 'react-bootstrap';
 import { productActions } from '../_actions';
-
-function ProductEdit(props) {
+function ProductEdit(props,match) {
     const {error} = useSelector(state => state.products);
-   console.log(props);
-
+    const { product } = useSelector(state => state.product);
     const [formData, setFormData] = useState({
         title: '',
-        price: '',
-        description:'',
+        price:  '',
+        description:  '',
        });
        const [image, setImage] = useState("");
        const [imageName, setImageName] = useState("Choose file");
@@ -28,22 +25,25 @@ function ProductEdit(props) {
         e.preventDefault();
         const payload = new FormData();
         payload.append("image", image);
-        payload.append("title", formData.title);
-        payload.append("price", formData.price,);
-        payload.append("description", formData.description,);
-        dispatch(productActions.addProduct(payload));
+        payload.append("title", formData.title ? formData.title :product && product.data[0].title ?  product.data[0].title : '');
+        payload.append("price", formData.price ? formData.price :product && product.data[0].price ?  product.data[0].price : '');
+        payload.append("description", formData.description ? formData.description :product && product.data[0].description ?  product.data[0].description : '');
+        dispatch(productActions.updateProduct(payload,location.state));
        };
         const dispatch = useDispatch();
-        const location = useLocation();
+        let location = props.history.location;
+        useEffect(() => {
+            props.history.push(location.pathname, location.state);
+            dispatch(productActions.getproduct(location.state));
+        }, []);
 
   
 
     return (
        <>
-        <HeaderPage></HeaderPage>
         <div className="col-lg-8 offset-lg-2  p-5">
             <div className="d-flex">
-                <h2>Add Product</h2>
+                <h2>Edit Product</h2>
                 <Link className="float-right ml-auto" to="/"><Button >  Product List</Button></Link>                
             </div>
          </div>
@@ -52,17 +52,17 @@ function ProductEdit(props) {
               encType="multipart/form-data" >
                 <div className="form-group">
                     <label>Title</label>
-                    <input className="form-control" type="title" name="title" value={title} onChange={(e) => onChange(e)} />
+                    <input className="form-control" defaultValue={product && product.data[0].title} type="title" name="title"  onChange={(e) => onChange(e)} />
                     {error && error.title  && <div className="invalid-feedback" style={{display:"block"}}>{error.title[0]}</div>}
                 </div>
                 <div className="form-group">
                     <label>Price</label>
-                    <input className="form-control" type="number" name="price" value={price} onChange={(e) => onChange(e)} />
+                    <input className="form-control" defaultValue={product && product.data[0].price} type="number" name="price"  onChange={(e) => onChange(e)} />
                     {error && error.price  && <div className="invalid-feedback" style={{display:"block"}}>{error.price[0]}</div>}
                 </div>
                 <div className="form-group">
                     <label>Description</label>
-                    <textarea className="form-control"  name="description" value={description} onChange={(e) => onChange(e)}></textarea>
+                    <textarea className="form-control" defaultValue={product && product.data[0].description}  name="description" onChange={(e) => onChange(e)}></textarea>
                     
                     {error && error.description  && <div className="invalid-feedback" style={{display:"block"}}>{error.description[0]}</div>}
                 </div>
@@ -74,7 +74,7 @@ function ProductEdit(props) {
                 </div>
                 <div className="form-group">
                     <button className="btn btn-primary">
-                        Submit
+                        Update
                     </button>
                 </div>
             </form>
@@ -83,4 +83,4 @@ function ProductEdit(props) {
     );
 }
 
-export default  ProductEdit ;
+export { ProductEdit };

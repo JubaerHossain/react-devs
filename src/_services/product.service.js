@@ -3,7 +3,7 @@ import { authHeader } from '../_helpers';
 const axios = require('axios');
 export const productService = {
     getproductAll,
-    getById,
+    getProduct,
     update,
     delete: _delete
 };
@@ -18,13 +18,13 @@ function getproductAll() {
     return fetch(`${config.apiUrl}/products`, requestOptions).then(handleResponse);
 }
 
-function getById(id) {
+function getProduct(id) {
     const requestOptions = {
         method: 'GET',
         headers: authHeader()
     };
 
-    return fetch(`${config.apiUrl}/users/${id}`, requestOptions).then(handleResponse);
+    return fetch(`${config.apiUrl}/products/${id}`, requestOptions).then(handleResponse);
 }
 
 

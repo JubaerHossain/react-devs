@@ -6,7 +6,6 @@ import config from 'config';
 import { useDispatch, useSelector } from 'react-redux';
 import Table from 'react-bootstrap/Table'
 import { userActions,productActions } from '../_actions';
-import { Button,Pagination } from 'react-bootstrap';
 import { history } from '../_helpers';
 const ProductList = (props) => {
     const dispatch = useDispatch();
@@ -16,7 +15,12 @@ const ProductList = (props) => {
     }, []);
   
     function handleDeleteUser(id) {
-        dispatch(userActions.delete(id));
+        alert("Are you want delete?");
+        dispatch(productActions.productdelete(id));
+        window.location.reload()
+    }
+    function goToEdit(data,id) {
+        history.push(data,id);
     }
     return (
         <>
@@ -47,9 +51,12 @@ const ProductList = (props) => {
                             <td>{product.price}</td>
                             <td> <img src={`${config.base_Url}/${product.image}`} alt="image" width="40" /></td>
                             <td style={{ whiteSpace: 'nowrap' }}>
-                                <Link to={`/product/${product.id}/view`} className="btn btn-sm btn-primary mr-1">View</Link>
-                                <Link to={`/product/${product.id}/edit`} className="btn btn-sm btn-primary mr-1">Edit</Link>
-                                
+                                <button onClick={() => goToEdit(`/product-view`,product.id)} className="btn btn-sm btn-primary mr-1" >
+                                  <span>View</span>
+                                </button>
+                                <button onClick={() => goToEdit(`/product-edit`,product.id)} className="btn btn-sm btn-primary mr-1" >
+                                  <span>Edit</span>
+                                </button>
                                 <button onClick={() => handleDeleteUser(product.id)} className="btn btn-sm btn-danger btn-delete-user" >
                                   <span>Delete</span>
                                 </button>

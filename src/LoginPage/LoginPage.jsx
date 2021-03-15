@@ -26,6 +26,8 @@ function LoginPage() {
         setInputs(inputs => ({ ...inputs, [name]: value }));
     }
 
+    
+
     function handleSubmit(e) {
         e.preventDefault();
 
